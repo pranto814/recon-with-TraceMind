@@ -45,6 +45,7 @@ Built-in passive web/API sources:
 - AnubisDB
 - SecurityTrails, only when `SECURITYTRAILS_API_KEY` is set
 - DNSDumpster official API, only when `DNSDUMPSTER_API_KEY` is set
+- Shodan DNS/domain lookup and host search, only when `SHODAN_API_KEY` is set
 
 TraceMind does not include Censys, direct C99 API, or Pentest-Tools cloud scanning in this final public-use build because those are token/plan/paid/quota-dependent and can confuse setup.
 
@@ -162,16 +163,45 @@ hash -r
 
 ## API Keys
 
-TraceMind works without API keys. These two optional public signup APIs are used only when the matching environment variable exists:
+TraceMind works without API keys. These optional public signup APIs are used only when the matching environment variable exists:
 
 ```bash
 export SECURITYTRAILS_API_KEY="your_key"
 export DNSDUMPSTER_API_KEY="your_key"
+export SHODAN_API_KEY="your_key"
 ```
 
 Paste these `export` commands in your Kali terminal before running TraceMind. For permanent use, add them to the bottom of `~/.bashrc` and run `source ~/.bashrc`.
 
 Never share screenshots or messages containing real API keys.
+
+## Shodan Support
+
+TraceMind can use Shodan as a passive source when `SHODAN_API_KEY` is set.
+
+It uses:
+
+- Shodan DNS domain lookup to collect known subdomain labels
+- Shodan host search with `hostname:<domain>` to collect hostnames seen in Shodan data
+
+TraceMind does not start Shodan on-demand scans. Shodan API usage can consume account query credits depending on your plan.
+
+Set your key in Kali:
+
+```bash
+export SHODAN_API_KEY="your_shodan_api_key"
+```
+
+Then run TraceMind normally:
+
+```bash
+python3 tracemind.py -t example.com
+```
+
+Shodan raw outputs:
+
+- `raw_shodan_domain.txt`
+- `raw_shodan_search.txt`
 
 ## Usage Examples
 
@@ -245,7 +275,7 @@ The stronger public-use pipeline adds:
 - DarkScout, if installed
 - Knockpy, if installed
 - Built-in passive API collection from public sources
-- SecurityTrails and DNSDumpster, if you set their keys
+- SecurityTrails, DNSDumpster, and Shodan, if you set their keys
 
 Aquatone is not used as a discovery source because it is mainly for probing and screenshotting already-discovered live web services. You can feed TraceMind's `clean_subdomains.txt` into Aquatone after enumeration if you want visual recon.
 
@@ -307,6 +337,8 @@ Common files inside that folder:
 - `raw_knockpy.txt`
 - `raw_securitytrails.txt`
 - `raw_dnsdumpster.txt`
+- `raw_shodan_domain.txt`
+- `raw_shodan_search.txt`
 - `raw_public_<source>.txt`
 - `all_raw.txt`
 - `clean_subdomains.txt`
