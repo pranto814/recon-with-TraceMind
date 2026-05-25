@@ -1,3 +1,13 @@
+```text
+ _____                   __  __ _           _
+|_   _| __ __ _  ___ ___|  \/  (_)_ __   __| |
+  | || '__/ _` |/ __/ _ \ |\/| | | '_ \ / _` |
+  | || | | (_| | (_|  __/ |  | | | | | | (_| |
+  |_||_|  \__,_|\___\___|_|  |_|_|_| |_|\__,_|
+
+TraceMind - Maximum Subdomain Discovery Tool
+A simple, modern subdomain discovery and DNS reconnaissance tool.
+```
 # TraceMind
 
 TraceMind is a Linux/Kali command-line cybersecurity reconnaissance tool written in Python 3.
