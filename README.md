@@ -26,11 +26,6 @@ Optional public local tools:
 - `knockpy`
 - `darkscout`
 
-Active fuzzing tools:
-
-- `gobuster`
-- `ffuf`
-
 Built-in passive web/API sources:
 
 - crt.sh
@@ -60,7 +55,7 @@ If `dnspython` is not installed, TraceMind falls back to `dig` and `host` for DN
 
 ```bash
 sudo apt update
-sudo apt install subfinder sublist3r amass dnsrecon theharvester dnsutils seclists findomain gobuster ffuf -y
+sudo apt install subfinder sublist3r amass dnsrecon theharvester dnsutils seclists findomain -y
 ```
 
 Some Kali package names and availability can vary by release. If a tool is missing, install it from that tool's official instructions.
@@ -144,8 +139,6 @@ which bbot
 which findomain
 which knockpy
 which darkscout
-which gobuster
-which ffuf
 python3 -c 'import shutil; print(shutil.which("bbot")); print(shutil.which("knockpy"))'
 ```
 
@@ -170,72 +163,6 @@ Paste these `export` commands in your Kali terminal before running TraceMind. Fo
 
 Never share screenshots or messages containing real API keys.
 
-## Fuzzing Support
-
-TraceMind supports active fuzzing using Gobuster DNS and FFUF.
-
-Active fuzzing runs by default in domain mode. To skip active modules, use:
-
-```bash
-python3 tracemind.py -t example.com --no-active
-```
-
-Wordlist selection order:
-
-- custom `--wordlist` path, if provided and valid
-- `hehe.txt` in the current folder
-- `/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt`
-- `/usr/share/wordlists/SecLists/Discovery/DNS/subdomains-top1million-5000.txt`
-
-If no wordlist exists, TraceMind prints:
-
-```text
-[!] No wordlist found. Put hehe.txt in the current folder or use --wordlist.
-```
-
-Gobuster DNS is used to brute-force possible DNS subdomains with a wordlist.
-
-Example:
-
-```bash
-python3 tracemind.py -t example.com --wordlist hehe.txt
-```
-
-Amass can also use the same wordlist for brute force.
-
-Example command internally used:
-
-```bash
-amass enum -brute -w hehe.txt -d example.com -o raw_amass_brute.txt
-```
-
-FFUF vhost fuzzing is used to discover hidden virtual hosts by fuzzing the `Host` header. The real tool name is `ffuf`; if you type `fuff`, that is a typo.
-
-Example:
-
-```bash
-python3 tracemind.py -t example.com --vhost-ip 192.168.1.10 --wordlist hehe.txt
-```
-
-Example with filter size:
-
-```bash
-python3 tracemind.py -t example.com --vhost-ip 192.168.1.10 --wordlist hehe.txt --filter-size 1234
-```
-
-Example with a base URL:
-
-```bash
-python3 tracemind.py -t example.com --vhost-url http://192.168.1.10/ --wordlist hehe.txt
-```
-
-Install commands:
-
-```bash
-sudo apt update
-sudo apt install gobuster ffuf seclists -y
-```
-
 ## Usage Examples
 
 Basic domain scan:
@@ -253,7 +180,7 @@ python3 tracemind.py -t example.com -o final.txt
 Use a brute-force wordlist:
 
 ```bash
-python3 tracemind.py -t example.com --wordlist hehe.txt
+python3 tracemind.py -t example.com --wordlist /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
 ```
 
 Use more resolver threads:
@@ -272,12 +199,6 @@ Skip built-in web/API sources:
 
 ```bash
 python3 tracemind.py -t example.com --skip-apis
-```
-
-Skip active brute-force/fuzzing modules:
-
-```bash
-python3 tracemind.py -t example.com --no-active
 ```
 
 Run IP mode:
@@ -313,8 +234,6 @@ The stronger public-use pipeline adds:
 - Findomain, if installed
 - DarkScout, if installed
 - Knockpy, if installed
-- Gobuster DNS brute force, if installed and active mode is enabled
-- FFUF vhost fuzzing, if installed, active mode is enabled, and `--vhost-ip` or `--vhost-url` is provided
 - Built-in passive API collection from public sources
 - SecurityTrails and DNSDumpster, if you set their keys
 
@@ -376,9 +295,6 @@ Common files inside that folder:
 - `raw_findomain.txt`
 - `raw_darkscout.txt`
 - `raw_knockpy.txt`
-- `raw_gobuster_dns.txt`
-- `raw_ffuf_vhost.json`
-- `raw_ffuf_vhost.txt`
 - `raw_securitytrails.txt`
 - `raw_dnsdumpster.txt`
 - `raw_public_<source>.txt`
